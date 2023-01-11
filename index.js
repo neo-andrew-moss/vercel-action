@@ -5,6 +5,13 @@ const { execSync } = require('child_process');
 const exec = require('@actions/exec');
 const packageJSON = require('./package.json');
 
+function tapPayload() {
+  const payload = core.getInput('payload');
+  if (payload) {
+    core.setOutput('payload', JSON.parse(payload));
+  }
+}
+
 function getGithubCommentInput() {
   const input = core.getInput('github-comment');
   if (input === 'true') return true;
@@ -360,6 +367,7 @@ async function run() {
   core.debug(`actor : ${context.actor}`);
   core.debug(`sha : ${context.sha}`);
   core.debug(`workflow : ${context.workflow}`);
+  tapPayload();
   let { ref } = context;
   let { sha } = context;
   await setEnv();
