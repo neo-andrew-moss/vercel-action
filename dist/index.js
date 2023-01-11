@@ -32492,8 +32492,8 @@ function tryParseJSON(str) {
 }
 
 function tapPayload(payload) {
-  debug('payload', payload);
-  setOutput('payload', payload);
+  core.debug('payload', payload);
+  core.setOutput('payload', payload);
 }
 
 function handlePayload(){
