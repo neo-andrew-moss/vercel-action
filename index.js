@@ -5,11 +5,29 @@ const { execSync } = require('child_process');
 const exec = require('@actions/exec');
 const packageJSON = require('./package.json');
 
-function tapPayload() {
+/**
+ * helper function to try and parse a provided input string as a JSON object.
+ * If it cannot be parsed the input string is returned.
+ */
+function tryParseJSON(str) {
+  let res = str
+  try {
+    res = JSON.parse(str)
+  } catch (e) {
+    core.info(`couldn't parse string as JSON: ${str}`)
+  }
+  return res
+}
+
+function tapPayload(payload) {
+  debug('payload', payload);
+  setOutput('payload', payload);
+}
+
+function handlePayload(){
   const payload = core.getInput('payload');
-  if (payload) {
-    core.debug('payload', JSON.parse(payload));
-    core.setOutput('payload', JSON.parse(payload));
+  if(payload){
+    tapPayload(tryParseJSON(payload))
   }
 }
 
@@ -368,7 +386,7 @@ async function run() {
   core.debug(`actor : ${context.actor}`);
   core.debug(`sha : ${context.sha}`);
   core.debug(`workflow : ${context.workflow}`);
-  tapPayload();
+  handlePayload();
   let { ref } = context;
   let { sha } = context;
   await setEnv();
