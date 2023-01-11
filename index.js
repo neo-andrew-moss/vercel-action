@@ -8,6 +8,7 @@ const packageJSON = require('./package.json');
 function tapPayload() {
   const payload = core.getInput('payload');
   if (payload) {
+    core.debug('payload', JSON.parse(payload));
     core.setOutput('payload', JSON.parse(payload));
   }
 }
